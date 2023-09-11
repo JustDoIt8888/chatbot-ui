@@ -20,7 +20,7 @@ import HomeContext from '@/pages/api/home/home.context';
 import { CodeBlock } from '../Markdown/CodeBlock';
 import { MemoizedReactMarkdown } from '../Markdown/MemoizedReactMarkdown';
 
-import { ActionIcon, Button, NavLink, Text } from '@mantine/core';
+import { ActionIcon, Button, Text } from '@mantine/core';
 import rehypeMathjax from 'rehype-mathjax';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
