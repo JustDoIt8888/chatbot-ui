@@ -8,6 +8,8 @@ import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
 import { saveConversation, saveConversations } from '@/utils/app/conversation';
 import { saveFolders } from '@/utils/app/folders';
 import { exportData, importData } from '@/utils/app/importExport';
+import { getSettings } from '@/utils/app/settings';
+
 
 import { Conversation } from '@/types/chat';
 import { LatestExportFormat, SupportedExportFormats } from '@/types/export';
@@ -42,7 +44,7 @@ export const Chatbar = () => {
   } = useContext(HomeContext);
 
   const {
-    state: { searchTerm, filteredConversations },
+    state: { searchTerm, filteredConversations, lightMode, },
     dispatch: chatDispatch,
   } = chatBarContextValue;
 
@@ -187,6 +189,14 @@ export const Chatbar = () => {
   };
 
   useEffect(() => {
+    const settings = getSettings();
+    if (settings.theme) {
+      chatDispatch({
+        field: 'lightMode',
+        value: settings.theme,
+      });
+    }
+
     if (searchTerm) {
       chatDispatch({
         field: 'filteredConversations',
@@ -204,7 +214,7 @@ export const Chatbar = () => {
         value: conversations,
       });
     }
-  }, [searchTerm, conversations]);
+  }, [searchTerm, conversations, lightMode]);
 
   return (
     <ChatbarContext.Provider
@@ -227,6 +237,7 @@ export const Chatbar = () => {
         folderComponent={<ChatFolders searchTerm={searchTerm} />}
         items={filteredConversations}
         searchTerm={searchTerm}
+        lightMode={lightMode}
         handleSearchTerm={(searchTerm: string) =>
           chatDispatch({ field: 'searchTerm', value: searchTerm })
         }
