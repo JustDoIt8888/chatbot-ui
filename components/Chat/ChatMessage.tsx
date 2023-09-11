@@ -200,23 +200,6 @@ export const ChatMessage: FC<Props> = memo(
                     {message.content}
                   </div>
                 )}
-
-                {!isEditing && (
-                  <div className="md:-mr-8 ml-1 md:ml-0 flex flex-col md:flex-row gap-4 md:gap-1 items-center md:items-start justify-end md:justify-start">
-                    <button
-                      className="invisible group-hover:visible focus:visible text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                      onClick={toggleEditing}
-                    >
-                      <IconEdit size={20} />
-                    </button>
-                    <button
-                      className="invisible group-hover:visible focus:visible text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                      onClick={handleDeleteMessage}
-                    >
-                      <IconTrash size={20} />
-                    </button>
-                  </div>
-                )}
               </div>
             ) : (
               // Assistant Chat Message
@@ -290,7 +273,11 @@ export const ChatMessage: FC<Props> = memo(
                     }`}
                   </MemoizedReactMarkdown>
                 </div>
-                {!messageIsStreaming && (
+                {!(
+                  messageIsStreaming &&
+                  messageIndex ==
+                    (selectedConversation?.messages.length ?? 0) - 1
+                ) && (
                   <>
                     <div className="flex pt-5 justify-between">
                       <div className="flex">
@@ -316,8 +303,7 @@ export const ChatMessage: FC<Props> = memo(
                     <div className="flex-1 pt-5">
                       <Text fw={700}>Related Question</Text>
                       <Text className="py-2" fz="md">
-                        Question 1? (optional can click and display in chat
-                        input)
+                        Question 1?
                       </Text>
                       <Text className="py-2" fz="md">
                         Question 2?
