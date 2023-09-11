@@ -5,6 +5,7 @@ import {
   IconThumbDown,
   IconThumbUp,
   IconUser,
+  IconWand,
 } from '@tabler/icons-react';
 import { FC, memo, useContext, useEffect, useRef, useState } from 'react';
 
@@ -142,13 +143,19 @@ export const ChatMessage: FC<Props> = memo(
         style={{ overflowWrap: 'anywhere' }}
       >
         <div className="flex justify-center p-4 text-base">
-          <div className="min-w-[40px] text-right font-bold">
+          {/* <div className="min-w-[40px] text-right font-bold">
             {message.role === 'assistant' ? (
               <IconRobot size={30} />
             ) : (
               <IconUser size={30} />
             )}
-          </div>
+          </div> */}
+
+          {message.role === 'user' && (
+            <div className="min-w-[40px] text-right font-bold">
+              <IconUser size={30} />
+            </div>
+          )}
 
           <div className="prose mt-[-2px] w-full dark:prose-invert">
             {message.role === 'user' ? (
@@ -202,6 +209,10 @@ export const ChatMessage: FC<Props> = memo(
               // Assistant Chat Message
               <>
                 <Text c="dimmed">Answer #{(messageIndex + 1) / 2}</Text>
+                <div className="flex pt-1">
+                  <IconWand size={18} />
+                  <Text fw={700}> AI-generated Response:</Text>
+                </div>
                 <div className="flex pt-3">
                   <MemoizedReactMarkdown
                     className="prose dark:prose-invert flex-1"
