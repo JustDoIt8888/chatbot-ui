@@ -13,7 +13,7 @@ import { useTranslation } from 'next-i18next';
 
 import { updateConversation } from '@/utils/app/conversation';
 
-import { Message } from '@/types/chat';
+import { Conversation, Message } from '@/types/chat';
 
 import HomeContext from '@/pages/api/home/home.context';
 
@@ -75,33 +75,43 @@ export const ChatMessage: FC<Props> = memo(
       setIsEditing(false);
     };
 
-    const handleDeleteMessage = () => {
-      if (!selectedConversation) return;
+    // const handleDeleteMessage = () => {
+    //   if (!selectedConversation) return;
 
-      const { messages } = selectedConversation;
-      const findIndex = messages.findIndex((elm) => elm === message);
+    //   const { messages } = selectedConversation;
+    //   const findIndex = messages.findIndex((elm) => elm === message);
 
-      if (findIndex < 0) return;
+    //   if (findIndex < 0) return;
 
-      if (
-        findIndex < messages.length - 1 &&
-        messages[findIndex + 1].role === 'assistant'
-      ) {
-        messages.splice(findIndex, 2);
-      } else {
-        messages.splice(findIndex, 1);
-      }
-      const updatedConversation = {
-        ...selectedConversation,
-        messages,
-      };
+    //   if (
+    //     findIndex < messages.length - 1 &&
+    //     messages[findIndex + 1].role === 'assistant'
+    //   ) {
+    //     messages.splice(findIndex, 2);
+    //   } else {
+    //     messages.splice(findIndex, 1);
+    //   }
+    //   const updatedConversation = {
+    //     ...selectedConversation,
+    //     messages,
+    //   };
 
-      const { single, all } = updateConversation(
-        updatedConversation,
-        conversations,
-      );
-      homeDispatch({ field: 'selectedConversation', value: single });
-      homeDispatch({ field: 'conversations', value: all });
+    //   const { single, all } = updateConversation(
+    //     updatedConversation,
+    //     conversations,
+    //   );
+    //   homeDispatch({ field: 'selectedConversation', value: single });
+    //   homeDispatch({ field: 'conversations', value: all });
+    // };
+
+    const handleSourceClick = (
+      selectedConversation: Conversation,
+      conversationIndex: Number,
+    ) => {
+      console.log(selectedConversation);
+      console.log(conversationIndex);
+      // ToDo: Open right sidebar
+      // ToDo: put into home state? so right sidebar can access?
     };
 
     const handlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -296,7 +306,7 @@ export const ChatMessage: FC<Props> = memo(
                         <ActionIcon variant="transparent">
                           <IconThumbDown size={20} />
                         </ActionIcon>
-                        <ActionIcon variant="transparent">
+                        <ActionIcon variant="transparent" onClick={copyOnClick}>
                           <IconCopy size={20} />
                         </ActionIcon>
                         <ActionIcon variant="transparent">
@@ -304,7 +314,17 @@ export const ChatMessage: FC<Props> = memo(
                         </ActionIcon>
                       </div>
                       <div>
-                        <Button compact variant="outline" color="gray">
+                        <Button
+                          compact
+                          variant="outline"
+                          color="gray"
+                          onClick={() =>
+                            handleSourceClick(
+                              selectedConversation,
+                              messageIndex,
+                            )
+                          }
+                        >
                           X sources
                         </Button>
                       </div>
