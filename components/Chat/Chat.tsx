@@ -345,14 +345,14 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                     </div>
                   ) : (
                     // ToDo: Change to some default title
-                    'Chatbot UI (New Conversation)'
+                    'CQA UI'
                   )}
                 </div>
               </div>
             </>
           ) : (
             <>
-              <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
+              <div className="sticky top-0 z-10 flex justify-center bottom-0 shadow-md border border-b-neutral-300 bg-white py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
                 {selectedConversation?.name ?? 'New Conversation'}
               </div>
 

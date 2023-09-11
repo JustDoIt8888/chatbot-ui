@@ -59,11 +59,11 @@ const Sidebar = <T,>({
   return isOpen ? (
     <div>
       <div
-        className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 p-2 text-[14px] transition-all sm:relative sm:top-0 text-sm bg-slate-50`}
+        className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 p-2 text-[14px] transition-all sm:relative sm:top-0 text-sm bg-gray-100`}
       >
         <div className="flex items-center">
           <button
-            className={`text-sidebar flex w-[190px] flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-[#22b5e6] bg-[#228be6]`}
+            className={`text-sidebar flex w-full flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-sky-600 bg-sky-700`}
             onClick={() => {
               handleCreateItem();
               handleSearchTerm('');
@@ -73,12 +73,12 @@ const Sidebar = <T,>({
             {addItemButtonTitle}
           </button>
 
-          <button
+          {/* <button
             className="ml-2 flex flex-shrink-0 cursor-pointer items-center gap-3 rounded-md border border-white/20 p-3 text-sm text-white transition-colors duration-200 hover:bg-[#22b5e6] bg-[#228be6]"
             onClick={handleCreateFolder}
           >
             <IconFolderPlus size={16} />
-          </button>
+          </button> */}
         </div>
         <Search
           placeholder={t('Search...') || ''}
