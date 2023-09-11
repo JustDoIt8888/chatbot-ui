@@ -1,12 +1,9 @@
 import {
-  IconCheck,
   IconCopy,
-  IconEdit,
   IconRobot,
   IconShare,
   IconThumbDown,
   IconThumbUp,
-  IconTrash,
   IconUser,
 } from '@tabler/icons-react';
 import { FC, memo, useContext, useEffect, useRef, useState } from 'react';
