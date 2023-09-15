@@ -329,15 +329,18 @@ export const ChatMessage: FC<Props> = memo(
                         </Button>
                       </div>
                     </div>
-                    <div className="flex-1 pt-5">
-                      <Text fw={700}>Related Question</Text>
-                      <Text className="py-2" fz="md">
-                        Question 1?
-                      </Text>
-                      <Text className="py-2" fz="md">
-                        Question 2?
-                      </Text>
-                    </div>
+                    {messageIndex ==
+                      (selectedConversation?.messages.length ?? 0) - 1 && (
+                      <div className="flex-1 pt-5">
+                        <Text fw={700}>Related Question</Text>
+                        <Text className="py-2" fz="md">
+                          Question 1?
+                        </Text>
+                        <Text className="py-2" fz="md">
+                          Question 2?
+                        </Text>
+                      </div>
+                    )}
                   </>
                 )}
               </>
