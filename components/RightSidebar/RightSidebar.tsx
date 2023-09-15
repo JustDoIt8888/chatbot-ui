@@ -134,7 +134,7 @@ const RightSidebar = () => {
       {showRightSidebar ? (
         <div>
           <div
-            className={`fixed top-0 ${side}-0 z-40 flex h-full w-[350px] flex-none flex-col space-y-2 p-2 text-[14px] transition-all sm:relative sm:top-0 text-sm bg-gray-100`}
+            className={`fixed top-0 ${side}-0 z-40 flex h-full w-[350px] flex-none flex-col space-y-2 p-2 text-[14px] transition-all sm:relative sm:top-0 text-sm bg-white`}
           >
             <div className="flex items-center">
               <div className="sticky top-0 z-10 justify-center text-sm text-neutral-800">
@@ -148,7 +148,7 @@ const RightSidebar = () => {
                 <div className="flex w-full flex-col pt-2">
                   {mockChatResponse.chunks_used.map((chatResponse, index) => (
                     <div key={index} className="border-b border-black py-1">
-                      <Text c="dimmed">Reference #{index}</Text>
+                      <Text c="gray.7">Reference #{index}</Text>
                       <Spoiler
                         maxHeight={120}
                         showLabel="Show more"
@@ -157,9 +157,9 @@ const RightSidebar = () => {
                       >
                         {chatResponse.page_content}
                       </Spoiler>
-                      <Text c="dimmed">Date?</Text>
+                      <Text c="gray.7">Date?</Text>
                       <Text
-                        c="dimmed"
+                        c="gray.7"
                         className="overflow-hidden text-ellipsis whitespace-nowrap"
                       >
                         {chatResponse.metadata.title}

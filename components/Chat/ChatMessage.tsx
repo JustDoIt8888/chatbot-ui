@@ -218,7 +218,7 @@ export const ChatMessage: FC<Props> = memo(
             ) : (
               // Assistant Chat Message
               <>
-                <Text c="dimmed">Answer #{(messageIndex + 1) / 2}</Text>
+                <Text c="gray.7">Answer #{(messageIndex + 1) / 2}</Text>
                 <div className="flex pt-1">
                   <IconWand size={18} />
                   <Text fw={700}> AI-generated Response:</Text>
@@ -301,23 +301,23 @@ export const ChatMessage: FC<Props> = memo(
                     <div className="flex pt-5 justify-between">
                       <div className="flex">
                         <ActionIcon variant="transparent">
-                          <IconThumbUp size={20} />
+                          <IconThumbUp size={20} color="black" />
                         </ActionIcon>
                         <ActionIcon variant="transparent">
-                          <IconThumbDown size={20} />
+                          <IconThumbDown size={20} color="black" />
                         </ActionIcon>
                         <ActionIcon variant="transparent" onClick={copyOnClick}>
-                          <IconCopy size={20} />
+                          <IconCopy size={20} color="black" />
                         </ActionIcon>
                         <ActionIcon variant="transparent">
-                          <IconShare size={20} />
+                          <IconShare size={20} color="black" />
                         </ActionIcon>
                       </div>
                       <div>
                         <Button
                           compact
                           variant="outline"
-                          color="gray"
+                          color="dark"
                           onClick={() =>
                             handleSourceClick(
                               selectedConversation,
