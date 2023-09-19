@@ -330,15 +330,18 @@ export const ChatMessage: FC<Props> = memo(
                       </div>
                     </div>
                     {messageIndex ==
-                      (selectedConversation?.messages.length ?? 0) - 1 && (
+                      (selectedConversation?.messages.length ?? 0) - 1 && (selectedConversation?.relatedQuery) && 
+                      (
                       <div className="flex-1 pt-5">
                         <Text fw={700}>Related Question</Text>
-                        <Text className="py-2" fz="md">
-                          Question 1?
-                        </Text>
-                        <Text className="py-2" fz="md">
-                          Question 2?
-                        </Text>
+                        {
+                        selectedConversation?.relatedQuery.map((query, idx) => 
+                          <Button className="bg-inherit py-2 text-inherit hover:bg-inherit hover:text-[#047857] dark:border-none dark:bg-[#444654] dark:text-neutral-200" fz="md" 
+                          key={idx} 
+                          onClick={() => console.log("Clicked")}>
+                            {query}
+                          </Button>
+                        )}
                       </div>
                     )}
                   </>

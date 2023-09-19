@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 
 import { useTranslation } from 'next-i18next';
 
-import { getEndpoint } from '@/utils/app/api';
+import { getEndpoint, postRelatedQueryEndpoint } from '@/utils/app/api';
 import {
   saveConversation,
   saveConversations,
@@ -132,6 +132,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           homeDispatch({ field: 'messageIsStreaming', value: false });
           return;
         }
+        //Without Google's plugin API
         if (!plugin) {
           if (updatedConversation.messages.length === 1) {
             const { content } = message;
@@ -193,6 +194,35 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               });
             }
           }
+          
+          //Related query method
+          const relatedQuestionEndpoint = postRelatedQueryEndpoint();
+          const relatedQueryResponse = await fetch(relatedQuestionEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"query": updatedConversation.messages[updatedConversation.messages.length - 2].content}),
+          })
+          .then(response => {
+            if (!response.ok) {
+              homeDispatch({ field: 'loading', value: false });
+              homeDispatch({ field: 'messageIsStreaming', value: false });
+              toast.error(response.statusText + ". Failed connection to related query's endpoint");
+              return;
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (!data) {
+              homeDispatch({ field: 'loading', value: false });
+              homeDispatch({ field: 'messageIsStreaming', value: false });
+              return;
+            }
+            return data.relevant_queries;
+          });
+          updatedConversation.relatedQuery = relatedQueryResponse;
+
           saveConversation(updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
@@ -208,6 +238,8 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           homeDispatch({ field: 'conversations', value: updatedConversations });
           saveConversations(updatedConversations);
           homeDispatch({ field: 'messageIsStreaming', value: false });
+          
+        //With Google's plugin API
         } else {
           const { answer } = await response.json();
           const updatedMessages: Message[] = [
@@ -241,13 +273,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         }
       }
     },
-    [
-      apiKey,
-      conversations,
-      pluginKeys,
-      selectedConversation,
-      stopConversationRef,
-    ],
+    [apiKey, conversations, homeDispatch, pluginKeys, selectedConversation, stopConversationRef],
   );
 
   const scrollToBottom = useCallback(() => {

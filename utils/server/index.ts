@@ -23,6 +23,25 @@ export class OpenAIError extends Error {
   }
 }
 
+export const RelatedQuery = async (
+  query: string,
+  model: string = "gpt-3.5-turbo"
+) => {
+  const relatedQueryURL = 'http://127.0.0.1:8000/chat/relatedquery';
+  
+  return await fetch(relatedQueryURL, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+      query,
+      model
+    }),
+  });
+};
+
 export const OpenAIStream = async (
   model: OpenAIModel,
   systemPrompt: string,
