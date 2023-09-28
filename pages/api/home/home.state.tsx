@@ -29,6 +29,7 @@ export interface HomeInitialState {
   defaultModelId: OpenAIModelID | undefined;
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
+  selectedFollowUpQuestion: string;
 }
 
 export const initialState: HomeInitialState = {
@@ -55,4 +56,5 @@ export const initialState: HomeInitialState = {
   defaultModelId: undefined,
   serverSideApiKeyIsSet: false,
   serverSidePluginKeysSet: false,
+  selectedFollowUpQuestion: ''
 };

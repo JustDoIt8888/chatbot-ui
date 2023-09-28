@@ -41,6 +41,7 @@ export const ChatMessage: FC<Props> = memo(
         conversations,
         currentMessage,
         messageIsStreaming,
+        selectedFollowUpQuestion
       },
       dispatch: homeDispatch,
     } = useContext(HomeContext);
@@ -330,20 +331,29 @@ export const ChatMessage: FC<Props> = memo(
                       </div>
                     </div>
                     {messageIndex ==
-                      (selectedConversation?.messages.length ?? 0) - 1 && (selectedConversation?.relatedQuery) && 
-                      (
-                      <div className="flex-1 pt-5">
-                        <Text fw={700}>Related Question</Text>
-                        {
-                        selectedConversation?.relatedQuery.map((query, idx) => 
-                          <Button className="bg-inherit py-2 text-inherit hover:bg-inherit hover:text-[#047857] dark:border-none dark:bg-[#444654] dark:text-neutral-200" fz="md" 
-                          key={idx} 
-                          onClick={() => console.log("Clicked")}>
-                            {query}
-                          </Button>
-                        )}
-                      </div>
-                    )}
+                      (selectedConversation?.messages.length ?? 0) - 1 &&
+                      selectedConversation?.relatedQuery && (
+                        <div className="flex-1 pt-5">
+                          <Text fw={700}>AI-generated follow-up questions</Text>
+                          {selectedConversation?.relatedQuery.map(
+                            (query, idx) => (
+                              <Button
+                                className="bg-inherit py-2 text-inherit hover:bg-inherit flex hover:text-emerald-700 dark:border-none dark:bg-slate-600 dark:text-neutral-200"
+                                fz="md"
+                                key={idx}
+                                onClick={() =>
+                                  homeDispatch({
+                                    field: 'selectedFollowUpQuestion',
+                                    value: query,
+                                  })
+                                }
+                              >
+                                {'[' + idx + '] ' + query}
+                              </Button>
+                            ),
+                          )}
+                        </div>
+                      )}
                   </>
                 )}
               </>
