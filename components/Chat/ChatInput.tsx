@@ -1,4 +1,9 @@
-import { IconArrowDown, IconPlayerStop, IconSend } from '@tabler/icons-react';
+import {
+  IconArrowDown,
+  IconPlayerStop,
+  IconSend,
+  IconX,
+} from '@tabler/icons-react';
 import {
   KeyboardEvent,
   MutableRefObject,
@@ -40,7 +45,12 @@ export const ChatInput = ({
   const { t } = useTranslation('chat');
 
   const {
-    state: { selectedConversation, messageIsStreaming, prompts, selectedFollowUpQuestion },
+    state: {
+      selectedConversation,
+      messageIsStreaming,
+      prompts,
+      selectedFollowUpQuestion,
+    },
 
     dispatch: homeDispatch,
   } = useContext(HomeContext);
@@ -54,7 +64,7 @@ export const ChatInput = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showPluginSelect, setShowPluginSelect] = useState(false);
   const [plugin, setPlugin] = useState<Plugin | null>(null);
-  
+
   const promptListRef = useRef<HTMLUListElement | null>(null);
 
   const filteredPrompts = prompts.filter((prompt) =>
@@ -215,6 +225,10 @@ export const ChatInput = ({
     }
   };
 
+  const handleClear = (): void => {
+    setContent('');
+  };
+
   useEffect(() => {
     if (promptListRef.current) {
       promptListRef.current.scrollTop = activePromptIndex * 30;
@@ -249,9 +263,9 @@ export const ChatInput = ({
   }, []);
 
   useEffect(() => {
-    if (selectedFollowUpQuestion){
+    if (selectedFollowUpQuestion) {
       setContent(selectedFollowUpQuestion);
-      homeDispatch({field: "selectedFollowUpQuestion", value: ""})
+      homeDispatch({ field: 'selectedFollowUpQuestion', value: '' });
     }
   }, [selectedFollowUpQuestion, homeDispatch]);
 
@@ -291,8 +305,17 @@ export const ChatInput = ({
           />
 
           <button
+            className="absolute right-10 top-2 rounded-sm p-1 border-r-2  text-neutral-800 opacity-60 hover:bg-transparent hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
+            onClick={handleClear}
+            title="Clear"
+          >
+            <IconX size={18} />
+          </button>
+
+          <button
             className="absolute right-2 top-2 rounded-sm p-1 text-neutral-800 opacity-60 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
             onClick={handleSend}
+            title="Submit"
           >
             {messageIsStreaming ? (
               <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-neutral-800 opacity-60 dark:border-neutral-100"></div>
