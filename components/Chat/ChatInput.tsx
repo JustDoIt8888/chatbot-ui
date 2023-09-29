@@ -25,6 +25,8 @@ import HomeContext from '@/pages/api/home/home.context';
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
 
+import { Tooltip } from '@mantine/core';
+
 interface Props {
   onSend: (message: Message, plugin: Plugin | null) => void;
   onRegenerate: () => void;
@@ -304,26 +306,27 @@ export const ChatInput = ({
             onKeyDown={handleKeyDown}
           />
 
-          <button
-            className="absolute right-10 top-2 rounded-sm p-1 border-r-2  text-neutral-800 opacity-60 hover:bg-transparent hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
-            onClick={handleClear}
-            title="Clear"
-          >
-            <IconX size={18} />
-          </button>
+          <Tooltip label="Clear">
+            <button
+              className="absolute right-10 top-2 rounded-sm p-1 border-r-2  text-neutral-800 opacity-60 hover:bg-transparent hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
+              onClick={handleClear}
+            >
+              <IconX size={18} />
+            </button>
+          </Tooltip>
 
-          <button
-            className="absolute right-2 top-2 rounded-sm p-1 text-neutral-800 opacity-60 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
-            onClick={handleSend}
-            title="Submit"
-          >
-            {messageIsStreaming ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-neutral-800 opacity-60 dark:border-neutral-100"></div>
-            ) : (
-              <IconSend size={18} />
-            )}
-          </button>
-
+          <Tooltip label="Submit">
+            <button
+              className="absolute right-2 top-2 rounded-sm p-1 text-neutral-800 opacity-60 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-opacity-50 dark:text-neutral-100 dark:hover:text-neutral-200"
+              onClick={handleSend}
+            >
+              {messageIsStreaming ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-neutral-800 opacity-60 dark:border-neutral-100"></div>
+              ) : (
+                <IconSend size={18} />
+              )}
+            </button>
+          </Tooltip>
           {showScrollDownButton && (
             <div className="absolute bottom-12 right-0 lg:bottom-0 lg:-right-10">
               <button

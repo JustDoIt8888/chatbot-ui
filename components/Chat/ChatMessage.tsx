@@ -11,8 +11,6 @@ import { FC, memo, useContext, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
-import { updateConversation } from '@/utils/app/conversation';
-
 import { Conversation, Message } from '@/types/chat';
 
 import HomeContext from '@/pages/api/home/home.context';
@@ -20,7 +18,8 @@ import HomeContext from '@/pages/api/home/home.context';
 import { CodeBlock } from '../Markdown/CodeBlock';
 import { MemoizedReactMarkdown } from '../Markdown/MemoizedReactMarkdown';
 
-import { ActionIcon, Button, Text } from '@mantine/core';
+import { ActionIcon, Button, Text, Tooltip } from '@mantine/core';
+import { fade } from '@mantine/core/lib/Skeleton/Skeleton.styles';
 import rehypeMathjax from 'rehype-mathjax';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -41,7 +40,7 @@ export const ChatMessage: FC<Props> = memo(
         conversations,
         currentMessage,
         messageIsStreaming,
-        selectedFollowUpQuestion
+        selectedFollowUpQuestion,
       },
       dispatch: homeDispatch,
     } = useContext(HomeContext);
@@ -307,9 +306,21 @@ export const ChatMessage: FC<Props> = memo(
                         <ActionIcon variant="transparent">
                           <IconThumbDown size={20} color="black" />
                         </ActionIcon>
-                        <ActionIcon variant="transparent" onClick={copyOnClick}>
-                          <IconCopy size={20} color="black" />
-                        </ActionIcon>
+                        <Tooltip
+                          label="Copied to clipboard"
+                          opened={messagedCopied}
+                          transitionProps={{
+                            transition: 'fade',
+                            duration: 300,
+                          }}
+                        >
+                          <ActionIcon
+                            variant="transparent"
+                            onClick={copyOnClick}
+                          >
+                            <IconCopy size={20} color="black" />
+                          </ActionIcon>
+                        </Tooltip>
                         <ActionIcon variant="transparent">
                           <IconShare size={20} color="black" />
                         </ActionIcon>
