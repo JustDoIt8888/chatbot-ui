@@ -41,7 +41,7 @@ import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
 import { v4 as uuidv4 } from 'uuid';
-
+import { useSearchParams } from 'next/navigation';
 interface Props {
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
@@ -53,6 +53,10 @@ const Home = ({
   serverSidePluginKeysSet,
   defaultModelId,
 }: Props) => {
+  const searchParams = useSearchParams()
+  const url_query_key = "q"
+  const user_query = searchParams.get(url_query_key) ?? ""
+
   const { t } = useTranslation('chat');
   const { getModels } = useApiService();
   const { getModelsError } = useErrorService();
@@ -195,6 +199,7 @@ const Home = ({
       prompt: DEFAULT_SYSTEM_PROMPT,
       temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
       folderId: null,
+      relatedQuery: []
     };
 
     const updatedConversations = [...conversations, newConversation];
@@ -303,16 +308,29 @@ const Home = ({
       dispatch({ field: 'prompts', value: JSON.parse(prompts) });
     }
 
+    let cleanedConversationHistory: Conversation[] = []
     const conversationHistory = localStorage.getItem('conversationHistory');
     if (conversationHistory) {
       const parsedConversationHistory: Conversation[] =
         JSON.parse(conversationHistory);
-      const cleanedConversationHistory = cleanConversationHistory(
+      cleanedConversationHistory = cleanConversationHistory(
         parsedConversationHistory,
       );
 
       dispatch({ field: 'conversations', value: cleanedConversationHistory });
     }
+
+    const newConversation: Conversation = {
+      id: uuidv4(),
+      name: t('New Conversation'),
+      messages: [],
+      model: OpenAIModels[defaultModelId],
+      prompt: DEFAULT_SYSTEM_PROMPT,
+      temperature: DEFAULT_TEMPERATURE,
+      folderId: null,
+      relatedQuery: []
+    };
+    
 
     const selectedConversation = localStorage.getItem('selectedConversation');
     if (selectedConversation) {
@@ -330,22 +348,30 @@ const Home = ({
       const lastConversation = conversations[conversations.length - 1];
       dispatch({
         field: 'selectedConversation',
-        value: {
-          id: uuidv4(),
-          name: t('New Conversation'),
-          messages: [],
-          model: OpenAIModels[defaultModelId],
-          prompt: DEFAULT_SYSTEM_PROMPT,
-          temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
-          folderId: null,
-        },
+        value: newConversation,
       });
     }
+
+    // get query from URL
+    if (user_query != "" && conversationHistory && selectedConversation) {
+      console.log("user_query:", user_query)
+
+      const updatedConversations = [...cleanedConversationHistory, newConversation];
+
+      dispatch({ field: 'selectedConversation', value: newConversation });
+      dispatch({ field: 'conversations', value: updatedConversations });
+      dispatch({ field: 'url_user_query', value: user_query });
+
+      saveConversation(newConversation);
+      saveConversations(updatedConversations);
+    }
+
   }, [
     defaultModelId,
     dispatch,
     serverSideApiKeyIsSet,
     serverSidePluginKeysSet,
+    user_query
   ]);
 
   return (

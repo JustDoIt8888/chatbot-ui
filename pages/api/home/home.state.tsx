@@ -30,6 +30,7 @@ export interface HomeInitialState {
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
   selectedFollowUpQuestion: string;
+  url_user_query: string;
 }
 
 export const initialState: HomeInitialState = {
@@ -56,5 +57,6 @@ export const initialState: HomeInitialState = {
   defaultModelId: undefined,
   serverSideApiKeyIsSet: false,
   serverSidePluginKeysSet: false,
-  selectedFollowUpQuestion: ''
+  selectedFollowUpQuestion: '',
+  url_user_query: ''
 };

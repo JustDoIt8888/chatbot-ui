@@ -29,6 +29,7 @@ import { ChatInput } from './ChatInput';
 import { ChatLoader } from './ChatLoader';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
+
 // import { ErrorMessageDiv } from './ErrorMessageDiv';
 
 interface Props {
@@ -50,8 +51,8 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       modelError,
       loading,
       prompts,
+      url_user_query
     },
-    handleUpdateConversation,
     dispatch: homeDispatch,
   } = useContext(HomeContext);
 
@@ -59,7 +60,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   const [autoScrollEnabled, setAutoScrollEnabled] = useState<boolean>(true);
   const [showScrollDownButton, setShowScrollDownButton] =
     useState<boolean>(false);
-
+    
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -196,32 +197,32 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           }
           
           //Related query method
-          const relatedQuestionEndpoint = postRelatedQueryEndpoint();
-          const relatedQueryResponse = await fetch(relatedQuestionEndpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({"query": updatedConversation.messages[updatedConversation.messages.length - 2].content}),
-          })
-          .then(response => {
-            if (!response.ok) {
-              homeDispatch({ field: 'loading', value: false });
-              homeDispatch({ field: 'messageIsStreaming', value: false });
-              toast.error(response.statusText + ". Failed connection to related query's endpoint");
-              return;
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (!data) {
-              homeDispatch({ field: 'loading', value: false });
-              homeDispatch({ field: 'messageIsStreaming', value: false });
-              return;
-            }
-            return data.relevant_queries;
-          });
-          updatedConversation.relatedQuery = relatedQueryResponse;
+          // const relatedQuestionEndpoint = postRelatedQueryEndpoint();
+          // const relatedQueryResponse = await fetch(relatedQuestionEndpoint, {
+          //   method: 'POST',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({"query": updatedConversation.messages[updatedConversation.messages.length - 2].content}),
+          // })
+          // .then(response => {
+          //   if (!response.ok) {
+          //     homeDispatch({ field: 'loading', value: false });
+          //     homeDispatch({ field: 'messageIsStreaming', value: false });
+          //     toast.error(response.statusText + ". Failed connection to related query's endpoint");
+          //     return;
+          //   }
+          //   return response.json();
+          // })
+          // .then(data => {
+          //   if (!data) {
+          //     homeDispatch({ field: 'loading', value: false });
+          //     homeDispatch({ field: 'messageIsStreaming', value: false });
+          //     return;
+          //   }
+          //   return data.relevant_queries;
+          // });
+          // updatedConversation.relatedQuery = relatedQueryResponse;
 
           saveConversation(updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
@@ -313,13 +314,11 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   };
   const throttledScrollDown = throttle(scrollDown, 250);
 
-  // useEffect(() => {
-  //   console.log('currentMessage', currentMessage);
-  //   if (currentMessage) {
-  //     handleSend(currentMessage);
-  //     homeDispatch({ field: 'currentMessage', value: undefined });
-  //   }
-  // }, [currentMessage]);
+  useEffect(() => {
+    if (url_user_query) {
+      handleSend({role: 'user', content: url_user_query});
+    }
+  }, [url_user_query]);
 
   useEffect(() => {
     throttledScrollDown();
